@@ -12,7 +12,7 @@ jobs:
 
       - name: Calculate Tag with Override
         id: calculate_tag
-        uses: fundapps/github-workflows/.github/actions/calculate-tag@feat/allow-overriding-version-in-calculate-tag
+        uses: ./.github/actions/tag.yml
         with:
           application_name: silly-goober
           override_version: 1.2.3-override
