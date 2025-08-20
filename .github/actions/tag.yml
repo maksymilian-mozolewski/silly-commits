@@ -1,0 +1,83 @@
+name: Calculate New Tag
+description: Looks up the latest tag for the application and calculates the next one
+author: FundApps
+
+inputs:
+  application_name: 
+    description: |
+      The name of the application, will be used to construct the tag using the following pattern: <application_name>-v<version>-<postfix>
+    required: true
+  default_branch:
+    description: |
+      The default branch of the repository
+    required: false
+    default: "master"
+
+outputs:
+  new_tag:
+    description: |
+      The new tag for the application
+    value: ${{ steps.tag_version.outputs.version }}
+  semver_version:
+    description: | 
+      The semver version of the new tag, i.e. the <version> part of the tag. Say the tag is `rapptr-v1.2.3-blahblah`, the semver version would be `1.2.3-blahblah`
+    value: ${{ steps.raw_version.outputs.RAW_VERSION }}
+  override_version:
+    description: |
+      If provided will skip calculating the version based on the latest tag and will use the provided version instead.
+      
+      For example if override_version is set to `1.2.3-blahblah`, the tag will be `rapptr-v1.2.3-blahblah`
+      and the semver version will be `1.2.3-blahblah` the input value.
+      
+      This can be useful to speed up this process if you already have a deterministic version you want to use.
+    value: ${{ inputs.override_version }}
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Repository With History
+      if: ${{ !inputs.override_version }}
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        show-progress: false
+        ref: ${{ github.head_ref }}
+    - name: Calculate Version
+      if: ${{ !inputs.override_version }}
+      id: calculate_version
+      uses: codacy/git-version@80c816f11db8dea5e3a81025f598193015b51832
+      with:
+        prefix: ${{ inputs.application_name }}-v
+        release-branch: ${{ inputs.default_branch }}
+    - name: Set Tag Value
+      id: set_tag_value
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.override_version }}" ]; then
+          echo "TAG_VALUE=${{ inputs.application_name }}-v${{ inputs.override_version }}" >> $GITHUB_OUTPUT
+        else
+          echo "TAG_VALUE=${{ steps.calculate_version.outputs.version }}" >> $GITHUB_OUTPUT
+        fi
+    - name: Extract Raw Version
+      id: extract_raw_version
+      shell: bash
+      run: |
+        prefix="${{ inputs.application_name }}-v"
+        raw_version="${{ steps.set_tag_value.outputs.TAG_VALUE#${prefix}}"
+        echo RAW_VERSION=$raw_version >> $GITHUB_OUTPUT
+    - name: Print Outputs
+      shell: bash
+      run: |
+        echo "RAW_VERSION: ${{ steps.extract_raw_version.outputs.RAW_VERSION }}"
+        echo "TAG_VALUE: ${{ steps.set_tag_value.outputs.TAG_VALUE }}"
+    - name: Create tag
+      if: ${{ !inputs.override_version }}
+      uses: actions/github-script@v5
+      with:
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/${{ steps.set_tag_value.outputs.TAG_VALUE }}',
+            sha: context.sha
+          })
