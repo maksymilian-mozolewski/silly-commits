@@ -1,0 +1,24 @@
+name: Test Calculate Tag Override
+
+on:
+  push:
+
+jobs:
+  test-override:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Calculate Tag with Override
+        id: calculate_tag
+        uses: fundapps/github-workflows/.github/actions/calculate-tag@feat/allow-overriding-version-in-calculate-tag
+        with:
+          application_name: silly-goober
+          override_version: 1.2.3-override
+
+      - name: Print Outputs
+        run: |
+          echo "new_tag: ${{ steps.calculate_tag.outputs.new_tag }}"
+          echo "semver_version: ${{ steps.calculate_tag.outputs.semver_version }}"
+          echo "override_version: ${{ steps.calculate_tag.outputs.override_version }}"
