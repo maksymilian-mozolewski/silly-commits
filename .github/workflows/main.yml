@@ -17,7 +17,6 @@ jobs:
         uses: ./.github/actions/tag
         with:
           application_name: silly-goober
-          override_version: 1.2.3-override
 
       - name: Print Outputs
         run: |
