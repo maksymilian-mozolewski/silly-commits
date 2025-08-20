@@ -5,6 +5,8 @@ on:
 
 jobs:
   test-override:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
