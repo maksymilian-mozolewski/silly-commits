@@ -26,7 +26,7 @@ outputs:
   new_tag:
     description: |
       The new tag for the application
-    value: ${{ steps.tag_version.outputs.version }}
+    value: ${{ steps.set_tag_value.outputs.TAG_VALUE }}
   semver_version:
     description: |
       The semver version of the new tag, i.e. the <version> part of the tag. Say the tag is `rapptr-v1.2.3-blahblah`, the semver version would be `1.2.3-blahblah`
