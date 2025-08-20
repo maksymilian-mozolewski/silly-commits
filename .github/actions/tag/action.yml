@@ -71,7 +71,6 @@ runs:
         echo "RAW_VERSION: ${{ steps.extract_raw_version.outputs.RAW_VERSION }}"
         echo "TAG_VALUE: ${{ steps.set_tag_value.outputs.TAG_VALUE }}"
     - name: Create tag
-      if: ${{ !inputs.override_version }}
       uses: actions/github-script@v5
       with:
         script: |
