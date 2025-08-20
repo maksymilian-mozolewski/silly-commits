@@ -20,7 +20,6 @@ inputs:
       and the semver version will be `1.2.3-blahblah` the input value.
       
       This can be useful to speed up this process if you already have a deterministic version you want to use.
-    value: ${{ inputs.override_version }}
     required: false
 
 outputs:
