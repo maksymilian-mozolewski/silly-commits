@@ -62,8 +62,8 @@ runs:
       id: extract_raw_version
       shell: bash
       run: |
-        prefix="${{ inputs.application_name }}-v"
-        raw_version="${{ steps.set_tag_value.outputs.TAG_VALUE#${prefix}}"
+        prefix="${{ inputs.application_name }}-v?"  # ? is there just to add an extra char
+        raw_version=$(cut -c ${#prefix}- <<<"${{ steps.set_tag_value.outputs.RAW_VERSION }}")
         echo RAW_VERSION=$raw_version >> $GITHUB_OUTPUT
     - name: Print Outputs
       shell: bash
