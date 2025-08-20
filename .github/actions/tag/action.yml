@@ -63,7 +63,7 @@ runs:
       shell: bash
       run: |
         prefix="${{ inputs.application_name }}-v?"  # ? is there just to add an extra char
-        raw_version=$(cut -c ${#prefix}- <<<"${{ steps.set_tag_value.outputs.RAW_VERSION }}")
+        raw_version=$(cut -c ${#prefix}- <<<"${{ steps.set_tag_value.outputs.TAG_VALUE }}")
         echo RAW_VERSION=$raw_version >> $GITHUB_OUTPUT
     - name: Print Outputs
       shell: bash
