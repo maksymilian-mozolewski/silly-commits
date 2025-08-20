@@ -12,16 +12,6 @@ inputs:
       The default branch of the repository
     required: false
     default: "master"
-
-outputs:
-  new_tag:
-    description: |
-      The new tag for the application
-    value: ${{ steps.tag_version.outputs.version }}
-  semver_version:
-    description: | 
-      The semver version of the new tag, i.e. the <version> part of the tag. Say the tag is `rapptr-v1.2.3-blahblah`, the semver version would be `1.2.3-blahblah`
-    value: ${{ steps.raw_version.outputs.RAW_VERSION }}
   override_version:
     description: |
       If provided will skip calculating the version based on the latest tag and will use the provided version instead.
@@ -32,6 +22,17 @@ outputs:
       This can be useful to speed up this process if you already have a deterministic version you want to use.
     value: ${{ inputs.override_version }}
     required: false
+
+outputs:
+  new_tag:
+    description: |
+      The new tag for the application
+    value: ${{ steps.tag_version.outputs.version }}
+  semver_version:
+    description: | 
+      The semver version of the new tag, i.e. the <version> part of the tag. Say the tag is `rapptr-v1.2.3-blahblah`, the semver version would be `1.2.3-blahblah`
+    value: ${{ steps.raw_version.outputs.RAW_VERSION }}
+
 runs:
   using: "composite"
   steps:
