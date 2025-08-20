@@ -18,7 +18,6 @@ jobs:
         with:
           application_name: silly-goober
           default_branch: main
-          override_version: 0.0.9
 
       - name: Print Outputs
         run: |
