@@ -17,6 +17,7 @@ jobs:
         uses: ./.github/actions/tag
         with:
           application_name: silly-goober
+          default_branch: main
 
       - name: Print Outputs
         run: |
