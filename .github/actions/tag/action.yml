@@ -3,7 +3,7 @@ description: Looks up the latest tag for the application and calculates the next
 author: FundApps
 
 inputs:
-  application_name: 
+  application_name:
     description: |
       The name of the application, will be used to construct the tag using the following pattern: <application_name>-v<version>-<postfix>
     required: true
@@ -28,9 +28,9 @@ outputs:
       The new tag for the application
     value: ${{ steps.tag_version.outputs.version }}
   semver_version:
-    description: | 
+    description: |
       The semver version of the new tag, i.e. the <version> part of the tag. Say the tag is `rapptr-v1.2.3-blahblah`, the semver version would be `1.2.3-blahblah`
-    value: ${{ steps.raw_version.outputs.RAW_VERSION }}
+    value: ${{ steps.extract_raw_version.outputs.RAW_VERSION }}
 
 runs:
   using: "composite"
