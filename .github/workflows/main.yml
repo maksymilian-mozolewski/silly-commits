@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Override
-        run: echo "OVERRIDE='false'" >> $GITHUB_ENV
+        run: echo "OVERRIDE=false" >> $GITHUB_ENV
       - name: Print
         run: echo $OVERRIDE
       - name: Calculate Tag with Override
