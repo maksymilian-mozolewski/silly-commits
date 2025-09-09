@@ -8,21 +8,27 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Override
-        run: echo "OVERRIDE=" >> $GITHUB_ENV
+      - name: Sanitize branch
+        run: echo "SAFE_BRANCH=$(echo '${{ env.BRANCH_NAME }}' | tr '/' '-')" >> $GITHUB_ENV
+      - name: Set override_version for non-master
+        if: env.BRANCH_NAME != 'main'
+        run: echo "OVERRIDE_VERSION=1.0.0-${{ env.SAFE_BRANCH }}.${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Set override_version for master
+        if: env.BRANCH_NAME == 'main'
+        run: echo "OVERRIDE_VERSION=" >> $GITHUB_ENV
       - name: Print
-        run: echo $OVERRIDE
-      - name: Calculate Tag with Override
-        id: calculate_tag
-        uses: ./.github/actions/tag
+        run: echo "Override='$OVERRIDE_VERSION', Safe='$SAFE_BRANCH'"
+      - if: env.BRANCH_NAME != 'main'
+        uses: fundapps/github-workflows/.github/actions/calculate-tag@v2.13.0
+        id: tag
         with:
-          application_name: silly-goober
-          default_branch: main
-          override_version: ${{ env.OVERRIDE }}
-
+          application_name: "RegulatoryFiling"
+          override_version: ${{ env.OVERRIDE_VERSION }}
       - name: Print Outputs
         run: |
           echo "new_tag: ${{ steps.calculate_tag.outputs.new_tag }}"
