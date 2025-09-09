@@ -11,13 +11,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      - name: Override
+        run: echo "OVERRIDE=" >> $GITHUB_ENV
       - name: Calculate Tag with Override
         id: calculate_tag
         uses: ./.github/actions/tag
         with:
           application_name: silly-goober
           default_branch: main
+          override_version: $OVERRIDE
 
       - name: Print Outputs
         run: |
