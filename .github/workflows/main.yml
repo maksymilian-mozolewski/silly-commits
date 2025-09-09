@@ -21,7 +21,7 @@ jobs:
         with:
           application_name: silly-goober
           default_branch: main
-          override_version: $OVERRIDE
+          override_version: ${{ env.OVERRIDE }}
 
       - name: Print Outputs
         run: |
