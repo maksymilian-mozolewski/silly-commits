@@ -23,14 +23,8 @@ jobs:
         run: echo "OVERRIDE_VERSION=" >> $GITHUB_ENV
       - name: Print
         run: echo "Override='$OVERRIDE_VERSION', Safe='$SAFE_BRANCH'"
-      - if: env.BRANCH_NAME != 'main'
-        uses: ./.github/actions/tag
-        id: calculate_tag
+      - uses: ./.github/actions/tag
+        id: tag
         with:
           application_name: "RegulatoryFiling"
           override_version: ${{ env.OVERRIDE_VERSION }}
-      - name: Print Outputs
-        run: |
-          echo "new_tag: ${{ steps.calculate_tag.outputs.new_tag }}"
-          echo "semver_version: ${{ steps.calculate_tag.outputs.semver_version }}"
-          echo "override_version: ${{ steps.calculate_tag.outputs.override_version }}"
