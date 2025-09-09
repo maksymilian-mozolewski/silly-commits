@@ -24,7 +24,7 @@ jobs:
       - name: Print
         run: echo "Override='$OVERRIDE_VERSION', Safe='$SAFE_BRANCH'"
       - if: env.BRANCH_NAME != 'main'
-        uses: fundapps/github-workflows/.github/actions/calculate-tag@v2.13.0
+        uses: ./.github/actions/tag
         id: tag
         with:
           application_name: "RegulatoryFiling"
