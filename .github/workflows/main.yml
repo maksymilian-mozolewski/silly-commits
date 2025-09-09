@@ -28,3 +28,4 @@ jobs:
         with:
           application_name: "RegulatoryFiling"
           override_version: ${{ env.OVERRIDE_VERSION }}
+          default_branch: main
