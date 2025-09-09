@@ -25,7 +25,7 @@ jobs:
         run: echo "Override='$OVERRIDE_VERSION', Safe='$SAFE_BRANCH'"
       - if: env.BRANCH_NAME != 'main'
         uses: ./.github/actions/tag
-        id: tag
+        id: calculate_tag
         with:
           application_name: "RegulatoryFiling"
           override_version: ${{ env.OVERRIDE_VERSION }}
